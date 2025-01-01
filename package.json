@@ -1,0 +1,46 @@
+{
+  "name": "tubebackend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc -p .",
+    "dev": "nodemon src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "imports": {
+    "#utils/*":{
+      "types":"./src/utils/*.d.ts",
+      "production":"./dist/utils/*.js",
+      "default":"./src/utils/*.ts"
+    },
+    "#types/*":{
+      "types":"./src/types/*.d.ts",
+      "production":"./dist/types/*.js",
+      "default":"./src/types/*.ts"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.3",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.0"
+  },
+  "dependencies": {
+    "@distube/ytdl-core": "^4.15.6",
+    "@types/express": "^5.0.0",
+    "express": "^4.21.2"
+  }
+}
