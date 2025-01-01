@@ -63,7 +63,6 @@ const getInfo = async (req: Request, res: Response) => {
         url: format.url,
       }));
 
-    console.log(details, audioFormats, videoFormats);
     res.status(200).json({
       details,
       audioFormats,
