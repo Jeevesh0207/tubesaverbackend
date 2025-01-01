@@ -69,7 +69,13 @@ const getInfo = async (req: Request, res: Response) => {
       videoFormats,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve video information.' });
+    res
+      .status(500)
+      .json({
+        ok: false,
+        msg: 'Failed to retrieve video information.',
+        error: error,
+      });
   }
 };
 

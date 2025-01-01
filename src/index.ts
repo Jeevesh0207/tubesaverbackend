@@ -7,6 +7,7 @@ const PORT = 3000;
 // Middleware
 app.use(express.json());
 
+
 // Routes
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
