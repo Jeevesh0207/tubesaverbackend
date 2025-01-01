@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import { RequestLink } from '../../types/types';
 import ytdl from '@distube/ytdl-core';
 import { formatContentLength } from '../../utils/formatContentLength';
+import { agent } from '../../cookies/cookies';
 
 const getInfo = async (req: Request, res: Response) => {
   try {
     const { link }: RequestLink = req.body;
-    const info = await ytdl.getInfo(link);
+    const info = await ytdl.getInfo(link, { agent });
 
     const details = {
       title: info.videoDetails.title,
@@ -62,7 +63,7 @@ const getInfo = async (req: Request, res: Response) => {
         url: format.url,
       }));
 
-    console.log(details,audioFormats,videoFormats)  
+    console.log(details, audioFormats, videoFormats);
     res.status(200).json({
       details,
       audioFormats,
@@ -70,14 +71,12 @@ const getInfo = async (req: Request, res: Response) => {
       videoFormats,
     });
   } catch (error) {
-    console.log(error)
-    res
-      .status(500)
-      .json({
-        ok: false,
-        msg: 'Failed to retrieve video information.',
-        error: error,
-      });
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: 'Failed to retrieve video information.',
+      error,
+    });
   }
 };
 
