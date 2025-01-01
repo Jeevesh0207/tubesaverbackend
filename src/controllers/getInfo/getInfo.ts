@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { RequestLink } from '#type/types';
+import { RequestLink } from '../../types/types';
 import ytdl from '@distube/ytdl-core';
-import { formatContentLength } from '#utils/formatContentLength';
+import { formatContentLength } from '../../utils/formatContentLength';
 
 const getInfo = async (req: Request, res: Response) => {
   try {

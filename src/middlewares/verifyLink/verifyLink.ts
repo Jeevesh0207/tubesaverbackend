@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import ytdl from '@distube/ytdl-core';
 
-import { RequestLink } from '#type/types';
+import { RequestLink } from '../../types/types';
 
 const verifyLink = async (
   req: Request,
