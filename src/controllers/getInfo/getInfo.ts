@@ -83,11 +83,13 @@ const getInfo = async (req: Request, res: Response) => {
       .sort((a, b) => parseInt(b.size) - parseInt(a.size)); // Sort by size descending
 
     res.status(200).json({
-      ok:true,
-      details,
-      audioFormats,
-      defaultAudio,
-      videoFormats,
+      ok: true,
+      data: {
+        details,
+        audioFormats,
+        defaultAudio,
+        videoFormats,
+      },
     });
   } catch (error) {
     console.log(error);
