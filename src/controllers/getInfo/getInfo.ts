@@ -10,12 +10,12 @@ const getInfo = async (req: Request, res: Response) => {
     const { link }: RequestLink = req.body;
     const info = await ytdl.getInfo(link, { agent });
 
-    const len_thumb = info.videoDetails.thumbnails.length
+    const len_thumb = info.videoDetails.thumbnails.length;
 
     const details = {
       title: info.videoDetails.title,
       duration: formatTime(info.videoDetails.lengthSeconds),
-      thumbnails: info.videoDetails.thumbnails[len_thumb-1].url,
+      thumbnails: info.videoDetails.thumbnails[len_thumb - 1].url,
       author: info.videoDetails.author.name,
     };
 
@@ -23,14 +23,14 @@ const getInfo = async (req: Request, res: Response) => {
 
     // Mapping for resolution labels
     const resolutionLabels: Record<string, string> = {
-      "1440p": "2K",
-      "1440p60": "2K",
-      "1440p60 HDR": "2K",
-      "2160p": "4K",
-      "2160p60": "4K",
-      "2160p60 HDR": "4K",
-      "4320p": "8K",
-      "4320p60": "8K",
+      '1440p': '2K',
+      '1440p60': '2K',
+      '1440p60 HDR': '2K',
+      '2160p': '4K',
+      '2160p60': '4K',
+      '2160p60 HDR': '4K',
+      '4320p': '8K',
+      '4320p60': '8K',
     };
 
     // Separate audio-only formats
@@ -40,7 +40,8 @@ const getInfo = async (req: Request, res: Response) => {
         size: formatContentLength(format.contentLength),
         bitrate: format.audioBitrate,
         url: format.url,
-      }));
+      }))
+      .sort((a, b) => parseInt(b.size) - parseInt(a.size)); // Sort by size descending
 
     // Select default audio (best audio file by bitrate)
     const defaultAudio =
@@ -77,8 +78,9 @@ const getInfo = async (req: Request, res: Response) => {
         quality: format.qualityLabel,
         fps: format?.fps ?? '',
         url: format.url,
-        label: resolutionLabels[format.qualityLabel] || ""
-      }));
+        label: resolutionLabels[format.qualityLabel] || '',
+      }))
+      .sort((a, b) => parseInt(b.size) - parseInt(a.size)); // Sort by size descending
 
     res.status(200).json({
       details,
@@ -91,7 +93,8 @@ const getInfo = async (req: Request, res: Response) => {
     res.status(500).json({
       ok: false,
       msg: 'Failed to retrieve video information.',
-      error: error instanceof Error ? error.message : 'An unknown error occurred',
+      error:
+        error instanceof Error ? error.message : 'An unknown error occurred',
     });
   }
 };
