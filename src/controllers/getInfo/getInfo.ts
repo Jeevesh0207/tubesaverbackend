@@ -40,8 +40,9 @@ const getInfo = async (req: Request, res: Response) => {
         size: formatContentLength(format.contentLength),
         bitrate: format.audioBitrate,
         url: format.url,
+        sizeInBytes: format.contentLength
       }))
-      .sort((a, b) => parseInt(b.size) - parseInt(a.size)); // Sort by size descending
+      .sort((a, b) => parseInt(b.sizeInBytes) - parseInt(a.sizeInBytes)); 
 
     // Select default audio (best audio file by bitrate)
     const defaultAudio =
@@ -79,8 +80,9 @@ const getInfo = async (req: Request, res: Response) => {
         fps: format?.fps ?? '',
         url: format.url,
         label: resolutionLabels[format.qualityLabel] || '',
+        sizeInBytes: format.contentLength
       }))
-      .sort((a, b) => parseInt(b.size) - parseInt(a.size)); // Sort by size descending
+      .sort((a, b) => parseInt(b.sizeInBytes) - parseInt(a.sizeInBytes)); 
 
     res.status(200).json({
       ok: true,
