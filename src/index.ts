@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express';
 import routes from './routes'
+import { config } from './config/config';
+import { dbConnect } from './database';
 
 const app = express();
-const PORT = 3000;
+const PORT = config.port;
 
 // Middleware
 app.use(express.json());
@@ -16,7 +18,9 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 
-app.use('/',routes)
+app.use('/api',routes)
+
+// dbConnect();
 
 // Start the server
 app.listen(PORT, () => {

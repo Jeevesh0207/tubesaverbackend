@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { RequestLink } from '../../types/types';
 import ytdl from '@distube/ytdl-core';
 import { formatContentLength } from '../../utils/formatContentLength';
+import { formatTime } from '../../utils/formatTime';
 import { agent } from '../../cookies/cookies';
 
 const getInfo = async (req: Request, res: Response) => {
@@ -9,13 +10,28 @@ const getInfo = async (req: Request, res: Response) => {
     const { link }: RequestLink = req.body;
     const info = await ytdl.getInfo(link, { agent });
 
+    const len_thumb = info.videoDetails.thumbnails.length
+
     const details = {
       title: info.videoDetails.title,
-      duration: info.videoDetails.lengthSeconds,
-      thumbnails: info.videoDetails.thumbnails,
+      duration: formatTime(info.videoDetails.lengthSeconds),
+      thumbnails: info.videoDetails.thumbnails[len_thumb-1].url,
+      author: info.videoDetails.author.name,
     };
 
     const formats = info.formats;
+
+    // Mapping for resolution labels
+    const resolutionLabels: Record<string, string> = {
+      "1440p": "2K",
+      "1440p60": "2K",
+      "1440p60 HDR": "2K",
+      "2160p": "4K",
+      "2160p60": "4K",
+      "2160p60 HDR": "4K",
+      "4320p": "8K",
+      "4320p60": "8K",
+    };
 
     // Separate audio-only formats
     const audioFormats = formats
@@ -61,6 +77,7 @@ const getInfo = async (req: Request, res: Response) => {
         quality: format.qualityLabel,
         fps: format?.fps ?? '',
         url: format.url,
+        label: resolutionLabels[format.qualityLabel] || ""
       }));
 
     res.status(200).json({
@@ -74,7 +91,7 @@ const getInfo = async (req: Request, res: Response) => {
     res.status(500).json({
       ok: false,
       msg: 'Failed to retrieve video information.',
-      error,
+      error: error instanceof Error ? error.message : 'An unknown error occurred',
     });
   }
 };

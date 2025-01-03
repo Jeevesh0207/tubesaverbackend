@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import ytdl from '@distube/ytdl-core';
-
-import { RequestLink } from '../../types/types';
-
-const verifyLink = async (
+import { RequestLink } from 'src/types/types';
+import ytpl from '@distube/ytpl';
+const verifyPlaylist = async (
   req: Request,
   res: Response,
   next: NextFunction,
-): Promise<void> => {
+) => {
   try {
     const { link }: RequestLink = req.body;
     if (!link || link.trim() === '') {
@@ -16,23 +14,24 @@ const verifyLink = async (
         .json({ ok: false, message: 'Link is required and cannot be empty' });
       return;
     }
-    const isValid = ytdl.validateURL(link);
+    const isValid = ytpl.validateID(link);
     if (!isValid) {
-      res.status(500).json({
+      res.status(400).json({
         ok: false,
-        message: 'The provided link is not a valid YouTube URL',
+        msg: 'Invalid playlist link',
       });
       return;
     }
     next();
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       ok: false,
-      msg: 'Your link is invalid',
+      msg: 'Something went wrong',
       error: error instanceof Error ? error.message : 'An unknown error occurred',
     });
     return;
   }
 };
 
-export default verifyLink;
+export default verifyPlaylist;
