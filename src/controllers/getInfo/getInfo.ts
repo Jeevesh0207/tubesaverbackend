@@ -16,6 +16,7 @@ const getInfo = async (req: Request, res: Response) => {
     const details = {
       title: info.videoDetails.title,
       duration: formatTime(info.videoDetails.lengthSeconds),
+      durationInSec:info.videoDetails.lengthSeconds,
       thumbnails: info.videoDetails.thumbnails[len_thumb - 1].url,
       author: info.videoDetails.author.name,
       link:info.videoDetails.video_url
